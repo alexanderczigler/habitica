@@ -1,7 +1,4 @@
 var config = {
-  armoire: {
-    threshold: 500 // Buy Enchanted Armoire if there is more gold than this.
-  },
   aura: {
     threshold: 125 // Cast Protective Aura when mana is above this.
   },
@@ -9,33 +6,17 @@ var config = {
     threshold: 45 // Cast Blessing when health is below this.
   },
   user: {
-    id: "your-user-id-here",
-    token: "your-api-token-here"
+    id: "your-user-id",
+    token: "your-api-token"
   },
 }
-
-/*
- * Scheduled initializers.
- */
-
-function every15minutes() {
-  bless()
-}
-
-function every6hours() {
-  aura()
-}
-
-/*
- * Logic.
- */
 
 function aura() {
   var user = getUser()
 
   Logger.log('Mana is at ' + user.mana)
 
-  if (mana > config.aura.threshold) {
+  if (user.mana > config.aura.threshold) {
     call("post", "https://habitica.com/api/v3/user/class/cast/protectAura" )
   }
 }
@@ -45,7 +26,7 @@ function bless() {
 
   Logger.log('Health is at ' + user.health);
 
-  if (user.health < 45) {
+  if (user.health < config.bless.threshold) {
     Logger.log("Health is low, casting Blessing.");
     call("post", "https://habitica.com/api/v3/user/class/cast/healAll");
   }
@@ -60,12 +41,11 @@ function getUser() {
 
   return {
     health: user.data.stats.hp,
-    gold: user.data.stats.gp,
     mana: user.data.stats.mp
   }
 }
 
-function call(method, method) {
+function call(method, url) {
   var params = {
     "method" : method,
     "headers" : {
