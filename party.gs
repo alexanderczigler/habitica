@@ -13,16 +13,21 @@ var config = {
 function join() {
   const { data: { quest } } = getParty()
 
-  if (!quest.key)
+  if (!quest.key) {
+    Logger.log('No quest found')
     return
+  }
 
-  if (!quest.active)
+  if (quest.active) {
+    Logger.log('Quest is already active')
     return
+  }
 
-  if (!!quest.members[habId])
+  if (!!quest.members[config.user.id]) {
+    Logger.log('You are already on this quest')
     return
+  }
 
-  // Join quest.
   call('post', 'https://habitica.com/api/v3/groups/party/quests/accept')
 }
 
