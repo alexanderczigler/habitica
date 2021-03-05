@@ -49,9 +49,8 @@ function start() {
       Logger.log('Starting quest...')
 
       call('post', 'https://habitica.com/api/v3/groups/party/quests/force-start')
+      properties.deleteProperty('invitation')
     }
-
-    properties.deleteProperty('invitation')
 
     return
   }
