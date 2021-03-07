@@ -38,7 +38,7 @@ function getUser() {
 }
 
 function call(method, url) {
-  const params = {
+  const options = {
     'method' : method,
     'headers' : {
       'x-api-user' : config.user.id, 
@@ -46,6 +46,6 @@ function call(method, url) {
     }
   }
 
-  response = UrlFetchApp.fetch(url, params);
+  response = UrlFetchApp.fetch(url, options);
   return JSON.parse(response);
 }
