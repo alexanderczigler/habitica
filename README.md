@@ -12,7 +12,8 @@ When I reached a certain point I realized that gold started accumulating in my a
 
 #### Using
 
-Check the `config` and adjust the values according to your needs. I make sure the script saves a few hundred gold pieces because you never know when it can come in handy. Create a schedule running the `armoire()` function. My suggestion is to run it a couple of times a day for starters and then increase it until the amount of gold stops increasing.
+1. Adjust the `config` object at the top of the script.
+2. Schedule the `armoire()` function to run 2-4 times a day.
 
 ### Healer | healer.gs
 
@@ -23,7 +24,9 @@ After expanding my party I realized that the members are spread across the world
 
 #### Using
 
-Check the `config` object at the top and change the values accordingly. Then create a schedule that runs `aura()` and `bless()` regularly. My suggestion is to set `aura()` to run 2-4 times a day and `bless()` to run often, perhaps 4-8 times an hour.
+1. Adjust the `config` object at the top of the script.
+2. Schedule the `aura()` function to run 2-5 times a day.
+3. Schedule the `bless()` function to run 4-8 times an hour.
 
 ### Health
 
@@ -31,8 +34,8 @@ If your party is on a very mean boss and your healers are out of mana, you may n
 
 #### Using
 
-- Adjust `config` in the top of the script to suit your needs.
-- Schedule `healthPotion()` to run relatively often, I recommend 4-8 times an hour depending on the size of your party.
+1. Adjust `config` in the top of the script to suit your needs.
+2. Schedule `healthPotion()` to run relatively often, I recommend 4-8 times an hour depending on the size of your party.
 
 ### Party
 
@@ -43,7 +46,9 @@ The party script can help you ensure to never miss a quest invitaiton again. In 
 
 #### Using
 
-Check the `config` object at the top and change the values accordingly. Then create a schedule that runs `join()` and/or `start()` regularly. My suggestion is to set both to run every 1-2 hours.
+1. Adjust `config` in the top of the script to suit your needs.
+2. Schedule the `join()` function to run every hour.
+3. _(If you are the party leader)_ Schedule the `start()` function to run every hour.
 
 ## Installing
 
