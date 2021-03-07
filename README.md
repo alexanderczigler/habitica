@@ -2,13 +2,17 @@
 
 Here you'll find a few scripts that you can use to automate certain things in Habitica. They are inspired by some ideas posted on the [Habitica Wiki](https://habitica.fandom.com/wiki/Google_Apps_Script).
 
+## Why?
+
+The reason I am using these scripts is mainly to keep things smooth and take away the stress of having to check my party's health every now and then. After levelling beyond 100+ and growing my party I realize that there are some things in Habitica that I wanted to improve. I want to focus on the social aspects of running a party and make things as smooth as possible for everyone.
+
 ## Functions
 
 I have split my scripts into functions so it is easier for you to pick what you want.
 
 ### Economy | [economy.gs](https://github.com/alexanderczigler/habitica/blob/main/economy.gs)
 
-When I reached a certain point I realized that gold started accumulating in my account and each time I logged in to Habitica to find I had over a 100 g I would simply purchase an Enchanted Armoire. I want to focus on other things so naturally, I scripted this.
+When your level in Habitica is in the hundreds, gold starts accumulating in your account and I noticed that I basically only use it for buying Enchanted Armoires. This script will buy one for you while keeping some spare change around for the occasional Health Potion.
 
 #### Using
 
@@ -17,10 +21,7 @@ When I reached a certain point I realized that gold started accumulating in my a
 
 ### Healer | [healer.gs](https://github.com/alexanderczigler/habitica/blob/main/economy.gs)
 
-After expanding my party I realized that the members are spread across the world and their crons can run just about any time of the day. This makes it difficult for healers like myself to keep up and be able to rush in and heal the party if and when a boss deals a significant amount of damage. The healer script makes sure that everyone gets buffed regularly while preserving some mana for me. In addition, it will periodically look at my health and if it is too low, cast Blessing to heal the party.
-
-- **aura()** Casts Protective Aura if there is enough mana.
-- **bless()** Casts Blessing, healing yourself and your party members, if your health is low enough.
+After expanding my party I realized that the members are spread across the world and their crons can run just about any time of the day. This makes it difficult for healers like myself to keep up and be able to rush in and heal the party if and when a boss deals a significant amount of damage. This scripts uses my own health to try and figure out when to bast Blessing. Additionally, it will also cast Protective Aura to buff the party on a regular interval.
 
 #### Using
 
