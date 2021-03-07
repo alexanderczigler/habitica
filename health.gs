@@ -1,15 +1,15 @@
 var config = {
   health: {
-    threshold: 45
+    threshold: 45 // Buy health potion if health is below this
   },
   gold: {
-    threshold: 25
+    threshold: 25 // The cost of a health potion
   },
   mana: {
     threshold: 25
   },
   spells: {
-    hasBlessing: true
+    hasBlessing: true // If true and config.mana.threshold is met, will not buy a health potion
   },
   user: {
     id: "your-user-id",
