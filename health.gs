@@ -8,6 +8,9 @@ var config = {
   mana: {
     threshold: 25
   },
+  spells: {
+    hasBlessing: true
+  },
   user: {
     id: "your-user-id",
     token: "your-api-token"
@@ -22,17 +25,17 @@ function healthPotion() {
   Logger.log('Mana is at ' + user.mana)
 
   if (user.health > config.health.threshold) {
-    Logger.log('Health is good')
+    Logger.log('There are enough health points, exiting')
     return
   }
 
-  if (user.mana > config.mana.threshold) {
-    Logger.log('There is enough mana to cast Bless instead')
+  if (config.spells.hasBlessing && user.mana > config.mana.threshold) {
+    Logger.log('There is enough mana to cast Blessing instead, exiting')
     return
   }
 
   if (user.gold < config.gold.threshold) {
-    Logger.log('There is too little gold for buying a health potion')
+    Logger.log('There is too little gold for buying a health potion, exiting')
     return
   }
 
