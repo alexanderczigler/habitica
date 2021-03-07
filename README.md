@@ -6,7 +6,7 @@ Here you'll find a few scripts that you can use to automate certain things in Ha
 
 I have split my scripts into functions so it is easier for you to pick what you want.
 
-### Economy | economy.gs
+### Economy | [economy.gs](https://github.com/alexanderczigler/habitica/blob/main/economy.gs)
 
 When I reached a certain point I realized that gold started accumulating in my account and each time I logged in to Habitica to find I had over a 100 g I would simply purchase an Enchanted Armoire. I want to focus on other things so naturally, I scripted this.
 
@@ -15,7 +15,7 @@ When I reached a certain point I realized that gold started accumulating in my a
 1. Adjust the `config` object at the top of the script.
 2. Schedule the `armoire()` function to run 2-4 times a day.
 
-### Healer | healer.gs
+### Healer | [healer.gs](https://github.com/alexanderczigler/habitica/blob/main/economy.gs)
 
 After expanding my party I realized that the members are spread across the world and their crons can run just about any time of the day. This makes it difficult for healers like myself to keep up and be able to rush in and heal the party if and when a boss deals a significant amount of damage. The healer script makes sure that everyone gets buffed regularly while preserving some mana for me. In addition, it will periodically look at my health and if it is too low, cast Blessing to heal the party.
 
@@ -28,7 +28,7 @@ After expanding my party I realized that the members are spread across the world
 2. Schedule the `aura()` function to run 2-5 times a day.
 3. Schedule the `bless()` function to run 4-8 times an hour.
 
-### Health
+### Health | [health.gs](https://github.com/alexanderczigler/habitica/blob/main/economy.gs)
 
 If your party is on a very mean boss and your healers are out of mana, you may need to rely on health potions to stay alive. This script will check your health, gold and mana to determine whether to buy a potion or not.
 
@@ -37,7 +37,7 @@ If your party is on a very mean boss and your healers are out of mana, you may n
 1. Adjust `config` in the top of the script to suit your needs.
 2. Schedule `healthPotion()` to run relatively often, I recommend 4-8 times an hour depending on the size of your party.
 
-### Party
+### Party | [party.gs](https://github.com/alexanderczigler/habitica/blob/main/economy.gs)
 
 The party script can help you ensure to never miss a quest invitaiton again. In addition to that, if you are the party leader, it can help you auto-start quests after a certain time. This helps keeping the questing pace up.
 
