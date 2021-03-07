@@ -1,4 +1,4 @@
-var config = {
+const config = {
   aura: {
     threshold: 125 // Cast Protective Aura when mana is above this.
   },
@@ -6,29 +6,29 @@ var config = {
     threshold: 45 // Cast Blessing when health is below this.
   },
   user: {
-    id: "your-user-id",
-    token: "your-api-token"
+    id: 'your-user-id',
+    token: 'your-api-token'
   },
 }
 
 function aura() {
-  var user = getUser()
+  const { mana } = getUser()
 
-  Logger.log('Mana is at ' + user.mana)
+  Logger.log(`You have ${Math.floor(mana)} mana`)
 
-  if (user.mana > config.aura.threshold) {
-    call("post", "https://habitica.com/api/v3/user/class/cast/protectAura" )
+  if (mana > config.aura.threshold) {
+    call('post', 'https://habitica.com/api/v3/user/class/cast/protectAura' )
   }
 }
 
 function bless() {
-  var user = getUser()
+  const { health } = getUser()
 
-  Logger.log('Health is at ' + user.health);
+  Logger.log(`You have ${Math.floor(health)} health points`)
 
-  if (user.health < config.bless.threshold) {
-    Logger.log("Health is low, casting Blessing.");
-    call("post", "https://habitica.com/api/v3/user/class/cast/healAll");
+  if (health < config.bless.threshold) {
+    Logger.log('Health is low, casting Blessing.');
+    call('post', 'https://habitica.com/api/v3/user/class/cast/healAll');
   }
 }
 
@@ -37,7 +37,7 @@ function bless() {
  */
 
 function getUser() {
-  var user = call("get", "https://habitica.com/api/v3/user?userFields=stats")
+  const user = call('get', 'https://habitica.com/api/v3/user?userFields=stats')
 
   return {
     health: user.data.stats.hp,
@@ -46,16 +46,14 @@ function getUser() {
 }
 
 function call(method, url) {
-  var params = {
-    "method" : method,
-    "headers" : {
-      "x-api-user" : config.user.id, 
-      "x-api-key" : config.user.token
+  const options = {
+    'method' : method,
+    'headers' : {
+      'x-api-user' : config.user.id, 
+      'x-api-key' : config.user.token
     }
   }
 
-  response = UrlFetchApp.fetch(url, params);
-  var result = JSON.parse(response);
-
-  return result
+  response = UrlFetchApp.fetch(url, options);
+  return JSON.parse(response);
 }
