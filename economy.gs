@@ -1,25 +1,26 @@
-var config = {
+const config = {
   armoire: {
     threshold: 500 // Buy an Enchanted Armoire if there at least this much gold.
   },
   user: {
-    id: "your-user-id",
-    token: "your-api-token"
+    id: 'your-user-id',
+    token: 'your-api-token'
   },
 }
 
 function armoire() {
-  var user = getUser()
+  const { gold } = getUser()
 
-  Logger.log('Wallet contains ' + user.gold + ' coins')
+  Logger.log(`You have ${Math.floor(gold)} gold`)
 
-  if (user.gold > config.armoire.threshold) {
-    var result = call("post", "https://habitica.com/api/v3/user/buy-armoire")
+  if (gold > config.armoire.threshold) {
+    const { data: { armoire } } = call('post', 'https://habitica.com/api/v3/user/buy-armoire')
 
-    if (result.data.armoire.type == 'food') {
-       Logger.log("You gained " + result.data.armoire.dropText + ".")
+    if (armoire.type == 'food') {
+       Logger.log(`You gained ${armoire.dropText}`)
      } else {
-       Logger.log("You gained " + result.data.armoire.value + " " + result.data.armoire.type + ".")    
+       Logger.log('You gained ' + armoire.value + ' ' + armoire.type + '.')
+       Logger.log(`You gained ${armoire.value} ${armoire.type}`)
      }
   }
 }
@@ -29,7 +30,7 @@ function armoire() {
  */
 
 function getUser() {
-  var user = call("get", "https://habitica.com/api/v3/user?userFields=stats")
+  const user = call('get', 'https://habitica.com/api/v3/user?userFields=stats')
 
   return {
     gold: user.data.stats.gp,
@@ -37,16 +38,14 @@ function getUser() {
 }
 
 function call(method, url) {
-  var params = {
-    "method" : method,
-    "headers" : {
-      "x-api-user" : config.user.id, 
-      "x-api-key" : config.user.token
+  const params = {
+    'method' : method,
+    'headers' : {
+      'x-api-user' : config.user.id, 
+      'x-api-key' : config.user.token
     }
   }
 
   response = UrlFetchApp.fetch(url, params);
-  var result = JSON.parse(response);
-
-  return result
+  return JSON.parse(response);
 }
