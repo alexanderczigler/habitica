@@ -25,6 +25,15 @@ After expanding my party I realized that the members are spread across the world
 
 Check the `config` object at the top and change the values accordingly. Then create a schedule that runs `aura()` and `bless()` regularly. My suggestion is to set `aura()` to run 2-4 times a day and `bless()` to run often, perhaps 4-8 times an hour.
 
+### Health
+
+If your party is on a very mean boss and your healers are out of mana, you may need to rely on health potions to stay alive. This script will check your health, gold and mana to determine whether to buy a potion or not.
+
+#### Using
+
+- Adjust `config` in the top of the script to suit your needs.
+- Schedule `healthPotion()` to run relatively often, I recommend 4-8 times an hour depending on the size of your party.
+
 ### Party
 
 The party script can help you ensure to never miss a quest invitaiton again. In addition to that, if you are the party leader, it can help you auto-start quests after a certain time. This helps keeping the questing pace up.
