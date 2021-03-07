@@ -1,4 +1,4 @@
-# Habitica
+# Habitica Automation Scripts
 
 Here you'll find a few scripts that you can use to automate certain things in Habitica. They are inspired by some ideas posted on the [Habitica Wiki](https://habitica.fandom.com/wiki/Google_Apps_Script).
 
