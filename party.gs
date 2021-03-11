@@ -32,6 +32,12 @@ function description() {
 
     if (!!leader) {
       description += `:game_die: Current quest leader is **${leader.profile.name}**\n\n`
+      properties.setProperty('lastQuestLeader', leader.profile.name)
+    }
+  } else {
+    if (!!properties.getProperty('lastQuestLeader')) {
+      const lastQuestLeader = properties.getProperty('lastQuestLeader')
+      description += `There is no active quest. The next person to invite is whomever comes after **${lastQuestLeader}**`
     }
   }
 
