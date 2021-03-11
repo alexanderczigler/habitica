@@ -23,6 +23,8 @@ const config = {
 function description() {
   const party = getParty()
 
+  let currentQuestLeader
+
   let description = ''
   description += `# ${config.party.description.title}\n\n`
   description += `${config.party.description.ingress}\n\n`
@@ -33,6 +35,7 @@ function description() {
     if (!!leader) {
       description += `:game_die: Current quest leader is **${leader.profile.name}**\n\n`
       properties.setProperty('lastQuestLeader', leader.profile.name)
+      currentQuestLeader = leader.profile.name
     }
   } else {
     if (!!properties.getProperty('lastQuestLeader')) {
@@ -45,7 +48,12 @@ function description() {
 
   config.party.members.active = sort(config.party.members.active)
   config.party.members.active.forEach(member => {
-    description += `- ${member}\n`
+    if (!!currentQuestLeader && member === currentQuestLeader) {
+      Logger.log(`${member} is current quest leader`)
+      description += `- **:game_die: ${member}**\n`
+    } else {
+      description += `- ${member}\n`
+    }
   })
 
   description += '## Inactive members\n\n'
