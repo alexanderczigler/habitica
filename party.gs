@@ -43,12 +43,14 @@ function description() {
 
   description += '## Active questing members\n\n'
 
+  config.party.members.active = sort(config.party.members.active)
   config.party.members.active.forEach(member => {
     description += `- ${member}\n`
   })
 
   description += '## Inactive members\n\n'
 
+  config.party.members.inactive = sort(config.party.members.inactive)
   config.party.members.inactive.forEach(member => {
     description += `- ${member}\n`
   })
@@ -141,4 +143,28 @@ function call(method, url, payload) {
 
   response = UrlFetchApp.fetch(url, options);
   return JSON.parse(response);
+}
+
+/*
+ * Case-insensitive sorting
+ * From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+ */
+function sort(array) {
+  array = array.sort((a, b) => {
+    const nameA = a.toUpperCase() // ignore upper and lowercase
+    const nameB = b.toUpperCase() // ignore upper and lowercase
+    
+    if (nameA < nameB) {
+      return -1
+    }
+    
+    if (nameA > nameB) {
+      return 1
+    }
+
+    // names must be equal
+    return 0
+  })
+
+  return array
 }
