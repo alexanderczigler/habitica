@@ -29,8 +29,12 @@ function description() {
   description += `# ${config.party.description.title}\n\n`
   description += `${config.party.description.ingress}\n\n`
 
-  if (!!party.quest) {
-    let leader = getMember(party.quest.leader)
+  if (!!party.quest && !!party.quest.active) {
+    let leader
+
+    if (!!party.quest.leader) {
+      leader = getMember(party.quest.leader)
+    }
 
     if (!!leader) {
       description += `:game_die: Current quest leader is **${leader.profile.name}**\n\n`
@@ -40,7 +44,7 @@ function description() {
   } else {
     if (!!properties.getProperty('lastQuestLeader')) {
       const lastQuestLeader = properties.getProperty('lastQuestLeader')
-      description += `There is no active quest. The next person to invite is whomever comes after **${lastQuestLeader}**`
+      description += `There is no active quest. The next person to invite is whomever comes after **${lastQuestLeader}**\n\n`
     }
   }
 
