@@ -1,34 +1,43 @@
 const properties = PropertiesService.getScriptProperties()
 
 const config = {
-  party: {
-    description: {
-      ingress: '',
-      title: 'Welcome to **The Party!**',
-    },
-    members: {
-      active: [],
-      inactive: []
-    },
-  },
   quest: {
     gracePeriod: 12 // Hours.
   },
   user: {
-    id: 'your-user-id',
-    token: 'your-api-token'
+    id: '',
+    token: ''
   },
+}
+
+const Description = function (markdown) {
+  this.markdown = markdown ?? ''
+}
+
+Description.prototype.write = function (line) {
+  this.markdown += ` ${line ?? ''}`
+}
+
+Description.prototype.writeLine = function (line) {
+  this.write(`${line ?? ''}\n\n`)
 }
 
 function description() {
   const party = getParty()
 
-  let currentQuestLeader
+  let description = new Description()
 
-  let description = ''
-  description += `# ${config.party.description.title}\n\n`
-  description += `${config.party.description.ingress}\n\n`
+  /*
+   * This is where you build your party description.
+   * Use description.line() and description.newLine() to add markdown.
+   */
+  description.writeLine(`# Welcome to **The Party!**`)
+  description.write(`Our only rule is that you stay active and pay attention to your dailies while you join a quest.`)
+  description.writeLine(`Enjoy your stay and ask your fellow party members if you have any questions about how Habitica works, changing your life or anything inbetween :blush:`)
 
+  /*
+   * Write information about the current quest, if any.
+   */
   if (!!party.quest && !!party.quest.active) {
     let leader
 
@@ -36,38 +45,41 @@ function description() {
       leader = getMember(party.quest.leader)
     }
 
+    description.writeLine(`## :game_die: The current quest\n\n`)
+
     if (!!leader) {
-      description += `:game_die: Current quest leader is **${leader.profile.name}**\n\n`
+      description.write(`**@${leader.profile.name}** is leading the current quest.`)
+      description.writeLine('See the quest details section for more information.')
+
+      description.write(`For those of you who joined this quest, pay extra attention to your dailies.`)
+      description.write('Any missed dailies may cause damage to yourself and other members.')
+      description.writeLine(`**Remember:** *Consistency is the key to breaking bad habits and forming good ones.*`)
+      
+      // Save current quest leader so the script remembers it after the quest has ended.
       properties.setProperty('lastQuestLeader', leader.profile.name)
-      currentQuestLeader = leader.profile.name
     }
   } else {
     if (!!properties.getProperty('lastQuestLeader')) {
       const lastQuestLeader = properties.getProperty('lastQuestLeader')
-      description += `There is no active quest. The next person to invite is whomever comes after **${lastQuestLeader}**\n\n`
+      description.writeLine(`There is no active quest. The previous quest was led by **${lastQuestLeader}**.`)
     }
   }
 
-  description += '## Active questing members\n\n'
+  description.writeLine('## :scroll: Quest invitations')
+  description.write('We take turns leading quests according to the order of our names.')
+  description.write('Usually someone in the party will mention the person next in line when it is their turn,')
+  description.writeLine(`but if that does not happen, alert the party leader **@${party.leader.profile.name}** who will sort it out.`)
 
-  config.party.members.active = sort(config.party.members.active)
-  config.party.members.active.forEach(member => {
-    if (!!currentQuestLeader && member === currentQuestLeader) {
-      Logger.log(`${member} is current quest leader`)
-      description += `- **:game_die: ${member}**\n`
-    } else {
-      description += `- ${member}\n`
-    }
-  })
+  description.writeLine('### :pushpin: Notes on quests')
+  description.writeLine(' - Leading quests is optional, just let us know if you want to pass')
+  description.writeLine(` - Quests are automatically started around ${config.quest.gracePeriod} hours after the invitation was sent`)
+  description.writeLine(' - When it is your turn you are free to pick any quest *you* want to do')
 
-  description += '## Inactive members\n\n'
+  description.write('As quests are automatically started, it is ok to be offline for a few days without disrupting the party.')
+  description.write('We get that everyone has a life outside of Habitica :yellow_heart:')
+  description.writeLine('but when you do join a quest, see it as an opportunity to work a little extra hard on your habits!')
 
-  config.party.members.inactive = sort(config.party.members.inactive)
-  config.party.members.inactive.forEach(member => {
-    description += `- ${member}\n`
-  })
-
-  updateParty({id: party.id, description: description})
+  updateParty({id: party.id, description: description.markdown})
 }
 
 function join() {
@@ -123,6 +135,10 @@ function start() {
  * Helpers.
  */
 
+function appendMarkdown(text) {
+  return `${text}\n\n`
+}
+
 function getMember(memberId) {
   const member = call('get', 'https://habitica.com/api/v3/members/' + memberId)
 
@@ -155,28 +171,4 @@ function call(method, url, payload) {
 
   response = UrlFetchApp.fetch(url, options);
   return JSON.parse(response);
-}
-
-/*
- * Case-insensitive sorting
- * From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
- */
-function sort(array) {
-  array = array.sort((a, b) => {
-    const nameA = a.toUpperCase() // ignore upper and lowercase
-    const nameB = b.toUpperCase() // ignore upper and lowercase
-    
-    if (nameA < nameB) {
-      return -1
-    }
-    
-    if (nameA > nameB) {
-      return 1
-    }
-
-    // names must be equal
-    return 0
-  })
-
-  return array
 }
