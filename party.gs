@@ -5,8 +5,8 @@ const config = {
     gracePeriod: 12 // Hours.
   },
   user: {
-    id: '',
-    token: ''
+    id: 'your-user-id',
+    token: 'your-api-token'
   },
 }
 
