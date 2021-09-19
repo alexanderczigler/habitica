@@ -48,7 +48,9 @@ function description() {
     description.writeLine(`## :game_die: The current quest\n\n`)
 
     if (!!leader) {
-      description.write(`**@${leader.profile.name}** is leading the current quest.`)
+      let questLeaderLink = `[@${leader.profile.name}](https://habitica.com/profile/${party.quest.leader})`
+
+      description.write(`**${questLeaderLink}** is leading the current quest.`)
       description.writeLine('See the quest details section for more information.')
 
       description.write(`For those of you who joined this quest, pay extra attention to your dailies.`)
@@ -65,10 +67,12 @@ function description() {
     }
   }
 
+  let partyLeaderLink = `[@${party.leader.profile.name}](https://habitica.com/profile/${party.leader.id})`
+
   description.writeLine('## :scroll: Quest invitations')
   description.write('We take turns leading quests according to the order of our names.')
   description.write('Usually someone in the party will mention the person next in line when it is their turn,')
-  description.writeLine(`but if that does not happen, alert the party leader **@${party.leader.profile.name}** who will sort it out.`)
+  description.writeLine(`but if that does not happen, alert the party leader **${partyLeaderLink}** who will sort it out.`)
 
   description.writeLine('### :pushpin: Notes on quests')
   description.writeLine(' - Leading quests is optional, just let us know if you want to pass')
