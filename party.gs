@@ -94,9 +94,9 @@ function description() {
   
   description.write('We take turns leading quests according to the order of our names.')
   description.write('If you are after the person with the 🎲 in the list, get ready to send a quest invitation')
-  description.writeLine('when the current quest ends.')
+  description.writeLine('when the current quest ends. (TIP: Be active in the chat to be counted as active!)')
 
-  description.writeLine('### Active members')
+  description.writeLine(`### **${partyMembers.length}** Active members`)
   partyMembers.forEach(member => {
     let name = member.name
 
@@ -111,7 +111,6 @@ function description() {
   description.writeLine(' - Leading quests is optional, just let us know if you want to pass')
   description.writeLine(` - Quests are automatically started around ${config.quest.gracePeriod} hours after the invitation was sent`)
   description.writeLine(' - When it is your turn you are free to pick any quest *you* want to do')
-  description.writeLine()
 
   description.write('As quests are automatically started, it is ok to be offline for a few days without disrupting the party.')
   description.write('We get that everyone has a life outside of Habitica :yellow_heart:')
