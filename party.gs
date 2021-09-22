@@ -49,8 +49,8 @@ function description() {
    */
   description.writeLine(`## 🎲 The current quest\n\n`)
 
-  const inactive = !party.quest
-  const invitation = !!party.quest && !party.quest.active
+  const inactive = !party.quest || !party.quest.active
+  const invitation = !!party.quest && !party.quest.active && !!leader
   const active = !!party.quest && !!party.quest.active
 
   /* 
