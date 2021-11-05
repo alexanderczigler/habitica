@@ -3,7 +3,7 @@ function healthPotion() {
 
   const hp = Math.floor(user.health)
   const gold = Math.floor(user.gold)
-  const mp =Math.floor(user.mana)
+  const mp = Math.floor(user.mana)
 
   Logger.log(`${gold} g, ${hp} hp, ${mp} mana`)
 
