@@ -6,9 +6,12 @@ Here you'll find a few scripts that you can use to automate certain things in Ha
 
 I started writing scripts for Habitica as my party grew large. Managing quests, heals and buffs started taking focus away from habit tracking and the social aspects of Habitica, so I had a look at the API and I started writing scripts to automate certain things.
 
-The result of this work is my suite of scripts that anyone can deploy in [Google Apps Script](https://script.google.com) in a matter of minutes to make their own Habitica experience and party management a lot more fun.
+The result of this work is my suite of scripts that anyone can deploy in a matter of minutes to make their own Habitica experience and party management a lot more fun!
 
-You can use my scripts to get the following features:
+## What can be automated?
+
+My scripts currently have the following features. The scripts are modular and the Habitica API is well-documented, so you can easily add more functionality to suit your own needs.
+
 - Active member tracking in party description
 - Automatic tracking of whose turn it is to start a quest
 - Automatic starting of pending quests after a configurable amount of time
@@ -19,7 +22,7 @@ You can use my scripts to get the following features:
 
 ## How does it work?
 
-First of all, you will need a Google account to utilise my scripts as they are. If you are familiar with javascript you can easily adapt them to function with nodejs or in a browser context but I will not go into how to do that here.
+First of all, you will need a Google account to utilise my scripts as they are. If you are familiar with javascript you can easily adapt them to run in a browser context or nodejs.
 
 ### Setting up the API client script
 
@@ -43,7 +46,7 @@ Now it is time to setup a new project for your automation scripts. If you want t
 
 1. Go to [Google Apps Script](https://script.google.com) and select "New project".
 2. Name the project `Habtica` (or something fitting) by clicking and editing "Untitled project" at the top of the page.
-3. Click the "+"-sign next to the "Libraries"-section to the left.
+3. Click the `+`-sign next to the "Libraries"-section to the left.
 4. Paste the "Script ID" that you copied earlier (from the `HabiticaApiClient` project).
 5. Click "Look up" and make sure to name it "HabiticaApiClient" before you add it.
 
@@ -60,65 +63,53 @@ At this point, your script is configured to use your Habitica account. Now it is
 
 #### Automation scripts
 
-##### Economy
+Pick a script in the [Automation](https://github.com/alexanderczigler/habitica/blob/main/Automation) folder. (See the section below to learn more about each script.)
 
-1. Create a new file by clicking the "+"-sign near the "Files"-section to the left.
-2. Name the file "Economy" and remove the contents of the file.
-3. Copy the contents of the file [Economy.gs](https://github.com/alexanderczigler/habitica/blob/main/Economy.gs) into the empty file in Google Apps Script.
-4. Save the file and click "Run" at the top of the script.
-5. You may now be prompted to authorize the project, if so click "Review permissions" and authorize the project in the popup window.
-7. Click "Triggers" (the alarm clock) button in the left-hand menu.
-8. Click the "Add Trigger" button.
-9. Under "Choose which function to run" select `armoire`.
-10. Under "Select type of time based trigger" select "Hour timer".
-11. Under "Select hour interval" select "Every hour".
-12. Click "Save".
+1. Create a new file in your Google Apps Script project by clicking the `+`-sign near the "Files"-section to the left.
+2. Name the file to match the script your picked above and remove the `myFunction` that Google generated.
+
+Repeat the steps for every script you would like to use, so that you have one file in your Google Apps Script project for each automation script.
+
+**NOTE** The first time you do this in a project, you need to run the script once to authorize it to make requests to the Habitica API.
+1. Save the file and click "Run" at the top of the script.
+2. You should now be prompted to authorize the project, if so click "Review permissions" and authorize the project in the popup window.
+
+#### Adding a trigger
+
+The triggers are what actually run the automation scripts. You need to create one trigger for every function, like casting a particular spell. This means you can customize the frequency at which each of the functions are run! (See the section below to learn about 
+
+1. Click "Triggers" (the alarm clock) button in the left-hand menu.
+2. Click the "Add Trigger" button.
+3. Under "Choose which function to run" select a function (see the section below to know which one to pick).
+4. Under "Select type of time based trigger" select `Hour timer` or `Minute timer`.
+5. Under "Select ... interval" select desired interval.
+6. Click "Save".
+
+## What does each script do?
 
 When your level in Habitica is in the hundreds, gold starts accumulating in your account and I noticed that I basically only use it for buying Enchanted Armoires. This script will buy one for you while keeping some spare change around for the occasional Health Potion.
 
-#### Using
+### [Economy.gs](https://github.com/alexanderczigler/habitica/blob/main/Automation/Economy.gs)
 
-1. Adjust the `config` object at the top of the script.
-2. Schedule the `armoire()` function to run 2-4 times a day.
+The `armoire()` function will buy one Enchanted Armoire. I recommend this function for players about lvl 100 or so as it is my experience that you will have a lot of disposible gold around then. Recommended trigger: `Hour timer`, `Every 2 hours`.
 
-### Healer | [healer.gs](https://github.com/alexanderczigler/habitica/blob/main/economy.gs)
+### [Healer.gs](https://github.com/alexanderczigler/habitica/blob/main/Automation/Healer.gs)
 
-After expanding my party I realized that the members are spread across the world and their crons can run just about any time of the day. This makes it difficult for healers like myself to keep up and be able to rush in and heal the party if and when a boss deals a significant amount of damage. This scripts uses my own health to try and figure out when to bast Blessing. Additionally, it will also cast Protective Aura to buff the party on a regular interval.
+The `aura()` function will cast Protective Aura if you have enough mana. Recommended trigger: `Hour timer`, `Every 6 hours`.
+The `bless()` function will cast Blessing if you are below 45 health. Recommended trigger: `Minute timer`, `Every 10 minutes`.
 
-#### Using
+See the Config to change the health and mana thresholds of these functions.
 
-1. Adjust the `config` object at the top of the script.
-2. Schedule the `aura()` function to run 2-5 times a day.
-3. Schedule the `bless()` function to run 4-8 times an hour.
+### [HealthPotion.gs](https://github.com/alexanderczigler/habitica/blob/main/Automation/HealthPotion.gs)
 
-### Health | [health.gs](https://github.com/alexanderczigler/habitica/blob/main/economy.gs)
+The `healthPotion()` function will buy a health potion if you are below 45 health. Recommended trigger: `Minute timer`, `Every 10 minutes`.
 
-If your party is on a very mean boss and your healers are out of mana, you may need to rely on health potions to stay alive. This script will check your health, gold and mana to determine whether to buy a potion or not.
+If you are a healer, this function will only buy a potion if you have too little mana to cast Blessing. See the Config to change the health and mana thresholds of this function.
 
-#### Using
+### [PartyLeader.gs](https://github.com/alexanderczigler/habitica/blob/main/Automation/PartyLeader.gs)
 
-1. Adjust `config` in the top of the script to suit your needs.
-2. Schedule `healthPotion()` to run relatively often, I recommend 4-8 times an hour depending on the size of your party.
+TODO: Document.
 
-### Party | [party.gs](https://github.com/alexanderczigler/habitica/blob/main/economy.gs)
+### [PartyMember.gs](https://github.com/alexanderczigler/habitica/blob/main/Automation/PartyMember.gs)
 
-The party script can help you ensure to never miss a quest invitaiton again. In addition to that, if you are the party leader, it can help you auto-start quests after a certain time. This helps keeping the questing pace up.
-
-- **join()** will check if there is any invitation and join the quest
-- **start()** will check if a quest invitation has been open for more than X hours and then start it
-
-#### Using
-
-1. Adjust `config` in the top of the script to suit your needs.
-2. Schedule the `join()` function to run every hour.
-3. _(If you are the party leader)_ Schedule the `start()` function to run every hour.
-
-## Installing
-
-1. Go to script.google.com
-2. Create a new project
-3. Copy the contents of a script here, for example healer.gs
-4. Paste the contents into the empty script editor, replacing any existing contents there
-5. Edit the config object at the top of the file to suit your needs (you can find your user id and api token under Settings in Habitica)
-6. Run each function manually to test
-7. Create a new schedule for every function you wish to automate
+TODO: Document.
