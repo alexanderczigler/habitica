@@ -91,18 +91,18 @@ When your level in Habitica is in the hundreds, gold starts accumulating in your
 
 ### [Economy.gs](https://github.com/alexanderczigler/habitica/blob/main/Automation/Economy.gs)
 
-The `armoire()` function will buy one Enchanted Armoire. I recommend this function for players about lvl 100 or so as it is my experience that you will have a lot of disposible gold around then. Recommended trigger: `Hour timer`, `Every 2 hours`.
+- The `armoire()` function will buy one Enchanted Armoire. I recommend this function for players about lvl 100 or so as it is my experience that you will have a lot of disposible gold around then. Recommended trigger: `Hour timer`, `Every 2 hours`.
 
 ### [Healer.gs](https://github.com/alexanderczigler/habitica/blob/main/Automation/Healer.gs)
 
-The `aura()` function will cast Protective Aura if you have enough mana. Recommended trigger: `Hour timer`, `Every 6 hours`.
-The `bless()` function will cast Blessing if you are below 45 health. Recommended trigger: `Minute timer`, `Every 10 minutes`.
+- The `aura()` function will cast Protective Aura if you have enough mana. Recommended trigger: `Hour timer`, `Every 6 hours`.
+- The `bless()` function will cast Blessing if you are below 45 health. Recommended trigger: `Minute timer`, `Every 10 minutes`.
 
 See the Config to change the health and mana thresholds of these functions.
 
 ### [HealthPotion.gs](https://github.com/alexanderczigler/habitica/blob/main/Automation/HealthPotion.gs)
 
-The `healthPotion()` function will buy a health potion if you are below 45 health. Recommended trigger: `Minute timer`, `Every 10 minutes`.
+- The `healthPotion()` function will buy a health potion if you are below 45 health. Recommended trigger: `Minute timer`, `Every 10 minutes`.
 
 If you are a healer, this function will only buy a potion if you have too little mana to cast Blessing. See the Config to change the health and mana thresholds of this function.
 
