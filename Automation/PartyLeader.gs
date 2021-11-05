@@ -1,15 +1,5 @@
 const properties = PropertiesService.getScriptProperties()
 
-const config = {
-  quest: {
-    gracePeriod: 12 // Hours.
-  },
-  user: {
-    id: 'your-user-id',
-    token: 'your-api-token'
-  },
-}
-
 const Description = function (markdown) {
   this.markdown = markdown ?? ''
 }
@@ -23,13 +13,13 @@ Description.prototype.writeLine = function (line) {
 }
 
 function description() {
-  const party = getParty()
+  const party = HabiticaApiClient.getParty(CONFIG)
 
   let description = new Description()
 
   let leader
   if (!!party.quest && !!party.quest.leader) {
-    leader = getMember(party.quest.leader)
+    leader = HabiticaApiClient.getMember(party.quest.leader, CONFIG)
   }
 
   const questLeaderLink = !!leader ? `[@${leader.profile.name}](https://habitica.com/profile/${party.quest.leader})` : '(unknown)'
@@ -109,7 +99,7 @@ function description() {
   
   description.writeLine('### 📌 Notes on quests')
   description.writeLine(' - Leading quests is optional, just let us know if you want to pass')
-  description.writeLine(` - Quests are automatically started around ${config.quest.gracePeriod} hours after the invitation was sent`)
+  description.writeLine(` - Quests are automatically started around ${CONFIG.quest.gracePeriod} hours after the invitation was sent`)
   description.writeLine(' - When it is your turn you are free to pick any quest *you* want to do')
 
   description.write('As quests are automatically started, it is ok to be offline for a few days without disrupting the party.')
@@ -119,7 +109,7 @@ function description() {
   description.writeLine('Have a wonderful day,')
   description.writeLine(`💛 ${partyLeaderLink}`)
 
-  updateParty({id: party.id, description: description.markdown})
+  HabiticaApiClient.updateParty({id: party.id, description: description.markdown}, CONFIG)
 }
 
 /*
@@ -130,16 +120,31 @@ function getMembers(party) {
 
   let partyMembers = []
 
-  const userMessages = party.chat.filter(c => !!c.user)
+  const userMessages = party.chat
 
   userMessages.forEach(message => {
-    const userId = message.uuid
-    const exists = partyMembers.filter(m => m.id === userId).length > 0
+    let id, name
+
+    if (!!message.uuid) {
+      id = message.uuid
+    }
+
+    if (!!message.user) {
+      name = message.user
+    } else if (!!message.info) {
+      name = message.info.user
+    }
+
+    if (!name) {
+      return
+    }
+
+    const exists = partyMembers.filter(m => m.name === name || m.uuid === id).length > 0
     
     if (!exists) {
       partyMembers.push({
-        id: userId,
-        name: message.user,
+        id: id,
+        name: name,
         username: message.username,
         updated: now,
       })
@@ -151,29 +156,8 @@ function getMembers(party) {
   return partyMembers
 }
 
-function join() {
-  const { quest } = getParty()
-
-  if (!quest.key) {
-    Logger.log('No quest found')
-    return
-  }
-
-  if (quest.active) {
-    Logger.log('Quest is already active')
-    return
-  }
-
-  if (!!quest.members[config.user.id]) {
-    Logger.log('You are already on this quest')
-    return
-  }
-
-  call('post', 'https://habitica.com/api/v3/groups/party/quests/accept')
-}
-
-function start() {
-  const party = getParty()
+function autoStartQuest() {
+  const party = HabiticaApiClient.getParty(CONFIG)
 
   if (!party.quest.key || party.quest.active) {
     Logger.log('There is no pending quest at the moment')
@@ -186,10 +170,10 @@ function start() {
   if (!!properties.getProperty('invitation')) {
     let diff = new Date() - Date.parse(properties.getProperty('invitation'))
 
-    if (diff > config.quest.gracePeriod * 3600000) {
+    if (diff > CONFIG.quest.gracePeriod * 3600000) {
       Logger.log('Starting quest...')
 
-      call('post', 'https://habitica.com/api/v3/groups/party/quests/force-start')
+      HabiticaApiClient.forceStartQuest(CONFIG)
       properties.deleteProperty('invitation')
     }
 
@@ -206,40 +190,6 @@ function start() {
 
 function appendMarkdown(text) {
   return `${text}\n\n`
-}
-
-function getMember(memberId) {
-  const member = call('get', 'https://habitica.com/api/v3/members/' + memberId)
-
-  return member.data
-}
-
-function getParty() {
-  const party = call('get', 'https://habitica.com/api/v3/groups/party')
-
-  return party.data
-}
-
-function updateParty(party) {
-  call('put', `https://habitica.com/api/v3/groups/${party.id}`, party)
-}
-
-function call(method, url, payload) {
-  const options = {
-    'method' : method,
-    'headers' : {
-      'x-api-user' : config.user.id, 
-      'x-api-key' : config.user.token
-    }
-  }
-
-  if (!!payload) {
-    options.contentType = 'application/json'
-    options.payload = JSON.stringify(payload)
-  }
-
-  response = UrlFetchApp.fetch(url, options);
-  return JSON.parse(response);
 }
 
 /*
