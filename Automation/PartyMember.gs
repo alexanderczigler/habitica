@@ -11,7 +11,7 @@ function autoJoinQuest() {
     return
   }
 
-  if (!!quest.members[config.user.id]) {
+  if (!!quest.members[CONFIG.userSettings.userId]) {
     Logger.log('You are already on this quest.')
     return
   }
