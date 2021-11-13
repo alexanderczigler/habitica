@@ -31,9 +31,10 @@ function description() {
    * Use description.line() and description.newLine() to add markdown.
    */
   description.writeLine(`# Welcome to **The Party!**`)
-  description.write(`Our only rule is that you stay active and pay attention to your dailies while you join a quest.`)
-  description.writeLine(`Enjoy your stay and ask your fellow party members if you have any questions about how Habitica works, changing your life or anything inbetween :blush:`)
+  description.writeLine(`Enjoy your stay and ask your fellow party members if you have any questions about how Habitica works, changing your life or anything inbetween!`)
 
+  description.writeLine(`Our only rule is that you stay active and pay extra attention to your dailies while you join a quest.`)
+  
   /*
    * Write information about the current quest, if any.
    */
@@ -73,8 +74,7 @@ function description() {
       description.writeLine('See the quest details section for more information.')
 
       description.write(`For those of you who joined this quest, pay extra attention to your dailies.`)
-      description.write('Any missed dailies may cause damage to yourself and other members.')
-      description.writeLine(`**Remember:** *Consistency is the key to breaking bad habits and forming good ones.*`)
+      description.writeLine('Any missed dailies may cause damage to yourself and other members.')
       
       // Save current quest leader so the script remembers it after the quest has ended.
       properties.setProperty('lastQuestLeader', leader.profile.name)
@@ -106,8 +106,7 @@ function description() {
   description.write('We get that everyone has a life outside of Habitica :yellow_heart:')
   description.writeLine('but when you do join a quest, see it as an opportunity to work a little extra hard on your habits!')
 
-  description.writeLine('Have a wonderful day,')
-  description.writeLine(`💛 ${partyLeaderLink}`)
+  description.writeLine('Have a wonderful day and remember that *Consistency is the key to breaking bad habits and forming good ones.*')
 
   HabiticaApiClient.updateParty({id: party.id, description: description.markdown}, CONFIG)
 }
